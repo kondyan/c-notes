@@ -135,6 +135,71 @@ int main(void) {
 
         PRINT_VAL(i);
     }
+
+    // incomplete types
+
+    {
+        // this is valid code
+
+        struct foo *x;
+        union bar *y;
+        enum baz *z;
+
+        // these are incomplete types
+    }
+
+    {
+        struct antelope {              // struct antelope is incomplete here
+            int leg_count;             // Still incomplete
+            float stomach_fullness;    // Still incomplete
+            float top_speed;           // Still incomplete
+            char *nickname;            // Still incomplete
+        };    
+    }
+
+    // one specialty about incomplete types is that we can declare a pointer to one like when building a linked list for example
+
+    {
+        struct node {
+            int val;
+            struct node *next;  // struct node is incomplete, but that's OK!
+        };
+    }
+
+    {
+        // this wouldn't be possible without this pointer rule
+        // about incomplete types
+        // you cannot dereference a pointer to an incomplete type though
+
+        struct a {
+            struct b *x;  // Refers to a `struct b`
+        };
+
+        struct b {
+            struct a *x;  // Refers to a `struct a`
+        };
+    }
+    {
+        // important to note that this is
+        extern int my_array[];  // Incomplete type
+        // because array length is not defined
+    }
+
+    // you can also complete incomplete types like this
+    {
+
+        struct foo;        // incomplete type
+
+        struct foo *p;     // pointer, no problem
+
+        // struct foo f;   // Error: incomplete type!
+
+        struct foo {
+            int x, y, z;
+        };                 // Now the struct foo is complete!
+
+        struct foo f;      // Success!
+    }
     
 
     return 0;
