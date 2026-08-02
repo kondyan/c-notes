@@ -1,5 +1,7 @@
 #include <stdlib.h>
 #include <stdio.h>
+#include <stdint.h>
+#include <inttypes.h>
 
 #define TYPESTR(x) _Generic((x), \
                         int: "int", \
@@ -200,6 +202,135 @@ int main(void) {
 
         struct foo f;      // Success!
     }
+    
+    // bit sized types
+
+    /*
+    We can specify the exact number of bits for an integer type
+
+    There are several options to do so:
+
+    Integers of exactly a certain size (intN_t)
+    Integers that are at least a certain size (int_leastN_t)
+    Integers that are at least a certain size and are as fast as possible (int_fastN_t)189
+    */
+
+    {
+        int32_t w;          // w is exactly 32 bits, signed
+        uint16_t x;         // x is exactly 16 bits, unsigned
+
+        int_least8_t y;     // y is at least 8 bits, signed
+
+        uint_fast64_t z;    // z is the fastest representation at least 64 bits, unsigned
+
+    }
+
+    {
+        // the list of the types that are defined guaranteed
+        /*
+        int_least8_t      uint_least8_t
+        int_least16_t     uint_least16_t
+        int_least32_t     uint_least32_t
+        int_least64_t     uint_least64_t
+
+        int_fast8_t       uint_fast8_t
+        int_fast16_t      uint_fast16_t
+        int_fast32_t      uint_fast32_t
+        int_fast64_t      uint_fast64_t
+        */
+
+        // these are optional depending on the system
+        /*
+        int8_t      uint8_t
+        int16_t     uint16_t
+        int32_t     uint32_t
+        int64_t     uint64_t
+
+        Namely, the system has 8, 16, 32, or 64 bit 
+        integers with no padding that use two’s complement representation, 
+        in which case the intN_t variant for that 
+        particular number of bits must be defined.
+        */
+
+        // use this if you wanna go as big as possible
+        // (max int representation possible)
+        /*
+        intmax_t
+        uintmax_t
+        */
+
+        // use these macros to append proper suffix to the number
+        // if you wanna fix the number of bits like "22L" or "3490ULL"
+
+        /*
+        INT8_C(x)     UINT8_C(x)
+        INT16_C(x)    UINT16_C(x)
+        INT32_C(x)    UINT32_C(x)
+        INT64_C(x)    UINT64_C(x)
+        INTMAX_C(x)   UINTMAX_C(x)
+        */
+
+        uint16_t x = UINT16_C(12);
+        intmax_t y = INTMAX_C(3490);
+
+        // limits defined for min and max values of each type
+        /*
+        INT8_MAX           INT8_MIN           UINT8_MAX
+        INT16_MAX          INT16_MIN          UINT16_MAX
+        INT32_MAX          INT32_MIN          UINT32_MAX
+        INT64_MAX          INT64_MIN          UINT64_MAX
+
+        INT_LEAST8_MAX     INT_LEAST8_MIN     UINT_LEAST8_MAX
+        INT_LEAST16_MAX    INT_LEAST16_MIN    UINT_LEAST16_MAX
+        INT_LEAST32_MAX    INT_LEAST32_MIN    UINT_LEAST32_MAX
+        INT_LEAST64_MAX    INT_LEAST64_MIN    UINT_LEAST64_MAX
+
+        INT_FAST8_MAX      INT_FAST8_MIN      UINT_FAST8_MAX
+        INT_FAST16_MAX     INT_FAST16_MIN     UINT_FAST16_MAX
+        INT_FAST32_MAX     INT_FAST32_MIN     UINT_FAST32_MAX
+        INT_FAST64_MAX     INT_FAST64_MIN     UINT_FAST64_MAX
+
+        INTMAX_MAX         INTMAX_MIN         UINTMAX_MAX
+        */
+
+        // limit for all unsigned types is obviously 0
+        // so there's no macro for them
+
+        // format specifiers
+
+        /*
+        PRIdn    PRIdLEASTn    PRIdFASTn    PRIdMAX
+        PRIin    PRIiLEASTn    PRIiFASTn    PRIiMAX
+        */
+
+        int_least16_t x1 = 3490;
+
+        // these macros are string literals so we can do this
+
+        printf("The value is %" PRIdLEAST16 "!\n", x);
+
+        // there are also these macros for unsigned types
+        /*
+        PRIon    PRIoLEASTn    PRIoFASTn    PRIoMAX
+        PRIun    PRIuLEASTn    PRIuFASTn    PRIuMAX
+        PRIxn    PRIxLEASTn    PRIxFASTn    PRIxMAX
+        PRIXn    PRIXLEASTn    PRIXFASTn    PRIXMAX
+
+        the lowercase n should be substituted with 8, 16, 32, or 64.
+        */
+
+        // this is the exact same thing but for scanf()
+        /*
+        SCNdn    SCNdLEASTn    SCNdFASTn    SCNdMAX
+        SCNin    SCNiLEASTn    SCNiFASTn    SCNiMAX
+        SCNon    SCNoLEASTn    SCNoFASTn    SCNoMAX
+        SCNun    SCNuLEASTn    SCNuFASTn    SCNuMAX
+        SCNxn    SCNxLEASTn    SCNxFASTn    SCNxMAX
+        */
+
+
+    }
+
     
 
     return 0;
